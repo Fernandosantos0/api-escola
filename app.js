@@ -2,6 +2,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
 import { join } from 'path';
@@ -16,6 +18,21 @@ import tokenRoutes from './src/routes/tokenRoutes';
 import alunoRoutes from './src/routes/alunoRoutes';
 import fotoRoutes from './src/routes/fotoRoutes';
 
+const whiteList = [
+    // 'https://react2.otaviomiranda.com',
+    'http://localhost:4001'
+];
+
+const corsOptions = {
+    origin: function(origin, callback) {
+        if(whiteList.indexOf(origin) !== -1 || !origin) {
+            callback(null, true);
+        } else {
+            callback(new TypeError('Not allowed by CORS'));
+        }
+    }
+}
+
 class App {
     constructor() {
         this.app = express();
@@ -24,6 +41,8 @@ class App {
     }
 
     middlewares() {
+        this.app.use(cors(corsOptions));
+        this.app.use(helmet());
         this.app.use(bodyParser.urlencoded({
             extended: true
         }));

@@ -8,7 +8,7 @@ export default {
     // Método do pacote multer para filtar os tipos de arquivos que poderam ser enviado
     fileFilter: (req, file, callback) => {
         if(file.mimetype != 'image/png' && file.mimetype != 'image/jpeg') {
-            return callback(new multer.MulterError('Arquivo precisa ser PNG ou JPG.'))
+            return callback(new multer.MulterError('Arquivo precisa ser PNG ou JPG.'), false);
         }
 
         return callback(null, true);
